@@ -12,6 +12,15 @@
         <entry key="..\:/Users/Andreas/AndroidStudioProjects/SmallTalk/app/src/main/res/layout/chat_bubble_self.xml" value="0.48125" />
         <entry key="..\:/Users/Andreas/AndroidStudioProjects/SmallTalk/app/src/main/res/layout/fragment_chat.xml" value="0.48125" />
         <entry key="..\:/Users/Andreas/AndroidStudioProjects/SmallTalk/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3295" />
+        <entry key="..\:/Users/Andreas/Documents/GitHub/SmallTalk/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2695" />
+        <entry key="..\:/Users/Andreas/Documents/GitHub/SmallTalk/app/src/main/res/drawable/ic_baseline_rectangle_24.xml" value="0.3295" />
+        <entry key="..\:/Users/Andreas/Documents/GitHub/SmallTalk/app/src/main/res/drawable/layout_background_login.xml" value="0.3295" />
+        <entry key="..\:/Users/Andreas/Documents/GitHub/SmallTalk/app/src/main/res/drawable/layout_input_background.xml" value="0.3295" />
+        <entry key="..\:/Users/Andreas/Documents/GitHub/SmallTalk/app/src/main/res/layout/activity_main.xml" value="0.26458333333333334" />
+        <entry key="..\:/Users/Andreas/Documents/GitHub/SmallTalk/app/src/main/res/layout/chat_bubble_others.xml" value="0.26458333333333334" />
+        <entry key="..\:/Users/Andreas/Documents/GitHub/SmallTalk/app/src/main/res/layout/chat_bubble_self.xml" value="0.48125" />
+        <entry key="..\:/Users/Andreas/Documents/GitHub/SmallTalk/app/src/main/res/layout/fragment_chat.xml" value="0.48125" />
+        <entry key="..\:/Users/Andreas/Documents/GitHub/SmallTalk/app/src/main/res/layout/fragment_login.xml" value="0.48125" />
       </map>
     </option>
   </component>

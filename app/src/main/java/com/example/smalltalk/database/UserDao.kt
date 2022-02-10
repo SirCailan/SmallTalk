@@ -11,7 +11,7 @@ interface UserDao {
     fun getCurrentUserId(userId: Int) : User
 
     @Insert
-    fun addCurrentUser(user: User)
+    fun addUser(user: User)
 
     @Update
     fun updateCurrentUser(user: User)
