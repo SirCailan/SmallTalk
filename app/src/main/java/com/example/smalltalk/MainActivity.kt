@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                add<ChatFragment>(R.id.main_fragment_container)
+                add<LoginFragment>(R.id.main_fragment_container)
             }
     }
 }
