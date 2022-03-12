@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
 import androidx.room.Room
 import com.example.smalltalk.database.AppDatabase
 import com.example.smalltalk.database.User
@@ -23,6 +24,7 @@ class LoginFragment : Fragment() {
     lateinit var passwordInput: EditText
     lateinit var signInButton: Button
     lateinit var userDao: UserDao
+    private val model: LoginViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -40,26 +42,14 @@ class LoginFragment : Fragment() {
         passwordInput = view.findViewById(R.id.input_password)
         signInButton = view.findViewById(R.id.button_sign_in)
 
-        setButtons()
+        model.buildDatabase(requireContext())
 
-        val database =
-            Room.databaseBuilder(requireContext(), AppDatabase::class.java, "SmallTalk_DATABASE")
-                .build()
-
-        userDao = database.userDao()
-
-    }
-
-    private fun setButtons() {
         signInButton.setOnClickListener {
             val username = usernameInput.text.toString()
             val password = passwordInput.text.toString()
 
-            if (username == "Cailan" && password == "passord123") {
-                val currentUser =
-                    User(userName = "Cailan", firstName = "Andreas", lastName = "Thomson")
-
-                signIn(currentUser) {
+            model.checkCredentials(username, password)?.let { user ->
+                model.signIn(user) {
                     requireActivity().supportFragmentManager.commit {
                         setReorderingAllowed(true)
                         add<ChatFragment>(R.id.main_fragment_container)
@@ -69,13 +59,4 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun signIn(currentUser: User, callback: () -> Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
-            userDao.deleteAllUsers()
-
-            userDao.addUser(currentUser)
-
-            callback()
-        }.start()
-    }
 }
