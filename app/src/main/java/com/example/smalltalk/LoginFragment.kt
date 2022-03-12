@@ -23,7 +23,6 @@ class LoginFragment : Fragment() {
     lateinit var usernameInput: EditText
     lateinit var passwordInput: EditText
     lateinit var signInButton: Button
-    lateinit var userDao: UserDao
     private val model: LoginViewModel by viewModels()
 
 
