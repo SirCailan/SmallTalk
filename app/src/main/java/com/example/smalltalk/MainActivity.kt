@@ -10,9 +10,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                add<LoginFragment>(R.id.main_fragment_container)
-            }
+        /* supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            add<LoginFragment>(R.id.main_fragment_container)
+        } */
     }
 }

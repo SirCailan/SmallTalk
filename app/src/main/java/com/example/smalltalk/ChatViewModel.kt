@@ -44,6 +44,6 @@ class ChatViewModel : ViewModel() {
         userDao = database.userDao()
     }
 
-    val currentUser =
+    val currentUser = "Andreas"
 
 }

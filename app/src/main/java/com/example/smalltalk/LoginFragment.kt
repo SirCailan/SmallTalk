@@ -7,17 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
-import androidx.room.Room
+import androidx.navigation.fragment.findNavController
 import com.android.volley.toolbox.Volley
-import com.example.smalltalk.database.AppDatabase
-import com.example.smalltalk.database.User
-import com.example.smalltalk.database.UserDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+
 
 class LoginFragment : Fragment() {
 
@@ -50,11 +43,17 @@ class LoginFragment : Fragment() {
             model.checkApi(Volley.newRequestQueue(context), username, password) { user ->
                 if (user != null) {
                     model.saveUser(user) {
-                        requireActivity().supportFragmentManager.commit {
+                        /* requireActivity().supportFragmentManager.commit {
                             setReorderingAllowed(true)
                             add<ChatFragment>(R.id.main_fragment_container)
+                        } */
+
+                        requireActivity().runOnUiThread {
+                            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToChatFragment())
                         }
                     }
+                } else {
+                    //TODO Add toast or whatever
                 }
             }
         }
