@@ -11,6 +11,7 @@ import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.room.Room
+import com.android.volley.toolbox.Volley
 import com.example.smalltalk.database.AppDatabase
 import com.example.smalltalk.database.User
 import com.example.smalltalk.database.UserDao
@@ -24,7 +25,6 @@ class LoginFragment : Fragment() {
     lateinit var passwordInput: EditText
     lateinit var signInButton: Button
     private val model: LoginViewModel by viewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,11 +47,13 @@ class LoginFragment : Fragment() {
             val username = usernameInput.text.toString()
             val password = passwordInput.text.toString()
 
-            model.checkCredentials(username, password)?.let { user ->
-                model.signIn(user) {
-                    requireActivity().supportFragmentManager.commit {
-                        setReorderingAllowed(true)
-                        add<ChatFragment>(R.id.main_fragment_container)
+            model.checkApi(Volley.newRequestQueue(context), username, password) { user ->
+                if (user != null) {
+                    model.saveUser(user) {
+                        requireActivity().supportFragmentManager.commit {
+                            setReorderingAllowed(true)
+                            add<ChatFragment>(R.id.main_fragment_container)
+                        }
                     }
                 }
             }

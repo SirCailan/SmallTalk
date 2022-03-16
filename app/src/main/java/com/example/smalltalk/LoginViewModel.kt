@@ -3,6 +3,10 @@ package com.example.smalltalk
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.StringRequest
+import com.beust.klaxon.Klaxon
 import com.example.smalltalk.database.AppDatabase
 import com.example.smalltalk.database.User
 import com.example.smalltalk.database.UserDao
@@ -22,7 +26,7 @@ class LoginViewModel : ViewModel() {
         userDao = database.userDao()
     }
 
-    fun checkCredentials(username: String, password: String): User? {
+    /*fun checkCredentials(username: String, password: String): User? {
         return if (username == "Cailan" && password == "passord123") {
             val currentUser =
                 User(userName = "Cailan", firstName = "Andreas", lastName = "Thomson")
@@ -30,9 +34,27 @@ class LoginViewModel : ViewModel() {
         } else {
             null
         }
+    } */
+
+    fun checkApi(queue: RequestQueue, username: String, password: String, callback: (User?) -> Unit) {
+        val url = "https://us-central1-smalltalk-3bfb8.cloudfunctions.net/api/login?userName=$username&password=$password"
+
+        val stringRequest = StringRequest(
+            Request.Method.GET,
+            url,
+            { response ->
+                val user = Klaxon().parse<User>(response)
+                callback(user)
+            },
+            { error ->
+                callback(null)
+            }
+        )
+
+        queue.add(stringRequest)
     }
 
-    fun signIn(currentUser: User, callback: () -> Unit) {
+    fun saveUser(currentUser: User, callback: () -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             userDao.deleteAllUsers()
 

@@ -1,9 +1,16 @@
 package com.example.smalltalk
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.room.Room
+import com.example.smalltalk.database.AppDatabase
+import com.example.smalltalk.database.UserDao
 import java.sql.Date
 
 class ChatViewModel : ViewModel() {
+
+    lateinit var userDao: UserDao
+
     val chatList = listOf(
         ChatMessage("Andreas", Date(11111), "Hei!"),
         ChatMessage(
@@ -29,6 +36,14 @@ class ChatViewModel : ViewModel() {
         ChatMessage("Ikke Andreas", Date(11111), "Hei"),
     )
 
-    val currentUser = "Andreas"
+    fun buildDatabase(context: Context) {
+        val database =
+            Room.databaseBuilder(context, AppDatabase::class.java, "SmallTalk_DATABASE")
+                .build()
+
+        userDao = database.userDao()
+    }
+
+    val currentUser =
 
 }
