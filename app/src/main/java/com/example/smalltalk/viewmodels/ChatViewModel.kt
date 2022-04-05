@@ -1,8 +1,9 @@
-package com.example.smalltalk
+package com.example.smalltalk.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
+import com.example.smalltalk.ChatMessage
 import com.example.smalltalk.database.AppDatabase
 import com.example.smalltalk.database.UserDao
 import java.sql.Date

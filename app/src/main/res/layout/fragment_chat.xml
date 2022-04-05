@@ -5,11 +5,11 @@
     android:id="@+id/outer_constraint_chat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChatFragment">
+    tools:context=".fragments.ChatFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/top_bar_layout"
+        android:id="@+id/layout_top_bar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/main_blue"
@@ -18,38 +18,28 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/header_title"
+            android:id="@+id/chat_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SmallTalk"
             android:textColor="@color/white"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/settings_image"
+            app:layout_constraintEnd_toStartOf="@+id/chat_button_settings"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/settings_image"
+            android:id="@+id/chat_button_settings"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="15dp"
             android:src="@drawable/ic_baseline_settings_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/layout_chat_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_bar_layout"
-        app:layout_constraintTop_toBottomOf="@+id/top_bar_layout" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_bar_layout"
@@ -61,29 +51,29 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+            android:id="@+id/chat_layout_background_messageinput"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
 
+            android:background="#80FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/send_button"
+            app:layout_constraintEnd_toStartOf="@id/chat_button_send_message"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="#80FFFFFF">
+            app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/textView"
+                android:id="@+id/chat_message_input"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
+                android:background="@android:color/transparent"
                 android:hint="Skriv en melding"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:background="@android:color/transparent"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -94,15 +84,25 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
-            android:id="@+id/send_button"
+            android:id="@+id/chat_button_send_message"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_baseline_send_24"
             android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_baseline_send_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_recyclerview_messages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_bar_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_top_bar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

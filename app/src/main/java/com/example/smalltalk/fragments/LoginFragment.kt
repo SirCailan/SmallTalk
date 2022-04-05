@@ -1,4 +1,4 @@
-package com.example.smalltalk
+package com.example.smalltalk.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +10,8 @@ import android.widget.EditText
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.volley.toolbox.Volley
+import com.example.smalltalk.viewmodels.LoginViewModel
+import com.example.smalltalk.R
 
 
 class LoginFragment : Fragment() {

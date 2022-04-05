@@ -1,4 +1,4 @@
-package com.example.smalltalk
+package com.example.smalltalk.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
