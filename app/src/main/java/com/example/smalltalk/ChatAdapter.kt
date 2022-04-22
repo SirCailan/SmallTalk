@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChatAdapter(
-    private val dataSet: List<ChatMessage>,
-    private val currentUser: String
+    private var dataSet: List<ChatMessage> = listOf(),
+    var currentUserId: String? = "N/A"
 ) : RecyclerView.Adapter<ChatAdapter.MessageViewHolder>() {
 
     open class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,7 +36,7 @@ class ChatAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (dataSet[position].senderName == currentUser) {
+        return if (dataSet[position].userId == currentUserId) {
             0
         } else {
             1
@@ -67,15 +69,31 @@ class ChatAdapter(
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val chatMessage = dataSet[position]
 
-        holder.senderName.text = chatMessage.senderName
-        holder.messageText.text = chatMessage.messageText
+        holder.senderName.text = chatMessage.userName
+        holder.messageText.text = chatMessage.message
 
-        holder.timeSent.text = chatMessage.timeSent.toString()
+        val simpleDate = SimpleDateFormat("hh:mm dd/MM/yyyy", Locale.getDefault())
+
+        holder.timeSent.text = simpleDate.format(chatMessage.timestamp)
     }
 
     override fun getItemCount(): Int {
         return dataSet.size
     }
 
+    fun switchDataset(newDataset: List<ChatMessage>) {
+        dataSet = newDataset
+        notifyDataSetChanged()
+    }
+
+    fun getDataset(): List<ChatMessage> {
+        return dataSet
+    }
+
+    fun addItem(newItem: ChatMessage) {
+        val newDataSet = dataSet + newItem
+        dataSet = newDataSet
+        notifyItemInserted(dataSet.size - 1)
+    }
 
 }

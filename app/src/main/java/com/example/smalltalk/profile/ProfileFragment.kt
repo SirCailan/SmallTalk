@@ -1,4 +1,4 @@
-package com.example.smalltalk.fragments
+package com.example.smalltalk.profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
