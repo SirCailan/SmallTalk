@@ -24,19 +24,20 @@ class ChatFragment : Fragment() {
     private lateinit var buttonSendMessage: ImageButton
     private lateinit var messageInput: EditText
     private lateinit var progressBar: ProgressBar
+    private lateinit var refreshButton: ImageButton
 
     private val viewModel: ChatViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.getUser()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel.buildDatabase(requireContext())
-
-        viewModel.getCurrentUser()
-
-        viewModel.fetchMessages(Volley.newRequestQueue(requireContext()))
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_chat, container, false)
     }
@@ -48,20 +49,21 @@ class ChatFragment : Fragment() {
         buttonSendMessage = view.findViewById(R.id.chat_button_send_message)
         messageInput = view.findViewById(R.id.chat_message_input)
         progressBar = view.findViewById(R.id.chat_messages_progressbar)
+        refreshButton = view.findViewById(R.id.chat_button_refresh)
 
         myRecyclerView = view.findViewById(R.id.chat_recyclerview_messages)
         myLayoutManager = LinearLayoutManager(activity)
         myRecyclerView.layoutManager = myLayoutManager
 
-        myAdapter = ChatAdapter(viewModel.chatList)
+        myAdapter = ChatAdapter(listOf())
         myRecyclerView.adapter = myAdapter
 
-        myRecyclerView.scrollToPosition(viewModel.chatList.size - 1)
-
         setListeners()
+
+        setButtons()
     }
 
-    private fun setListeners() {
+    private fun setButtons() {
         buttonSettings.setOnClickListener {
             //Navigates to profile / settings page.
             findNavController().navigate(ChatFragmentDirections.actionChatFragmentToProfileFragment())
@@ -72,7 +74,7 @@ class ChatFragment : Fragment() {
             messageInput.text.clear()
 
             if (input.isNotEmpty()) {
-                viewModel.sendMessage(Volley.newRequestQueue(requireContext()), input)
+                viewModel.sendMessage(input)
 
                 val user = viewModel.signedInUser.value
 
@@ -88,6 +90,13 @@ class ChatFragment : Fragment() {
             }
         }
 
+        refreshButton.setOnClickListener {
+            viewModel.pleaseWait.postValue(true)
+            viewModel.getMessages()
+        }
+    }
+
+    private fun setListeners() {
         viewModel.pleaseWait.observe(viewLifecycleOwner) { loading ->
             //Shows progressbar when loading messages, and hides it when finished.
             when (loading) {
@@ -111,6 +120,7 @@ class ChatFragment : Fragment() {
 
         viewModel.signedInUser.observe(viewLifecycleOwner) { user ->
             myAdapter.currentUserId = user.id
+            viewModel.getMessages()
         }
     }
 }

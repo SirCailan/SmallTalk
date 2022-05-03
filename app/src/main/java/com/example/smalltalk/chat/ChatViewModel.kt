@@ -13,6 +13,7 @@ import com.example.smalltalk.baseUrl
 import com.example.smalltalk.database.AppDatabase
 import com.example.smalltalk.database.User
 import com.example.smalltalk.database.UserDao
+import com.example.smalltalk.repositories.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -20,11 +21,11 @@ import kotlinx.coroutines.launch
 import java.sql.Date
 
 class ChatViewModel : ViewModel() {
-
-    lateinit var userDao: UserDao
+    private val userRepository = UserRepository()
 
     val signedInUser: MutableLiveData<User> = MutableLiveData()
-    val apiCallSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val fetchSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val postSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val messages: MutableLiveData<List<ChatMessage>> = MutableLiveData()
     val pleaseWait: MutableLiveData<Boolean> = MutableLiveData()
     val errorText: MutableLiveData<String> = MutableLiveData()
@@ -40,95 +41,38 @@ class ChatViewModel : ViewModel() {
         ChatMessage("gawreiu13", "Ok", "andreas", 11111111112),
     )
 
-    fun fetchMessages(queue: RequestQueue) {
-        pleaseWait.postValue(true)
-
-        signedInUser.value?.id.let { userId ->
-            val url = baseUrl + "messages?userId=" + userId
-
-            val messagesRequest = StringRequest(
-                Request.Method.GET,
-                url,
-                { json ->
-                    val parsedResponse = Klaxon().parseArray<ChatMessage>(json) ?: listOf()
-
-                    if (parsedResponse.isNotEmpty()) {
-                        messages.postValue(parsedResponse)
-                    } else {
-                        errorText.postValue("Kunne ikke hente meldinger")
-                    }
-
-                    pleaseWait.postValue(false)
-                },
-                { error ->
-                    val errorString = when (error.networkResponse.statusCode) {
-                        400 -> "400 - Feil input"
-                        401 -> "401 - Bruker har ikke tilgang"
-                        500 -> "500 - Serverfeil"
-                        else -> "Ukjent feil"
-                    }
-
-                    errorText.postValue(errorString)
-
-                    pleaseWait.postValue(false)
-                }
-            )
-
-            queue.add(messagesRequest)
-        }
-    }
-
-    fun sendMessage(
-        queue: RequestQueue,
-        messageText: String
-    ) {
+    fun getMessages() {
         signedInUser.value?.id?.let { userId ->
-            val url = baseUrl + "sendMessage"
+            userRepository.fetchMessages(userId) { success, errorString, fetchedMessages ->
+                pleaseWait.postValue(false)
+                fetchSuccess.postValue(success)
 
-            val postRequest: StringRequest = object : StringRequest(
-                Method.POST,
-                url,
-                { json ->
-                    apiCallSuccess.postValue(true)
-                },
-                { error ->
-                    val errorString = when (error.networkResponse.statusCode) {
-                        400 -> "400 - Feil input"
-                        401 -> "401 - Bruker har ikke tilgang"
-                        500 -> "500 - Serverfeil"
-                        else -> "Ukjent feil"
-                    }
-
+                if (success) {
+                    messages.postValue(fetchedMessages)
+                } else {
                     errorText.postValue(errorString)
-
-                    apiCallSuccess.postValue(false)
-                }
-            ) {
-                override fun getParams(): Map<String, String> {
-                    val params: MutableMap<String, String> = HashMap()
-
-                    params["message"] = messageText
-                    params["userId"] = userId
-
-                    return params
                 }
             }
-
-            queue.add(postRequest)
         }
     }
 
-    fun buildDatabase(context: Context) {
-        val database =
-            Room.databaseBuilder(context, AppDatabase::class.java, "SmallTalk_DATABASE")
-                .build()
+    fun sendMessage(messageText: String) {
+        signedInUser.value?.id?.let { userId ->
+            userRepository.sendMessage(messageText, userId) { success, errorString ->
+                postSuccess.postValue(success)
 
-        userDao = database.userDao()
+                if (success) {
+                    getMessages()
+                } else {
+                    errorText.postValue(errorString)
+                }
+            }
+        }
     }
 
-    fun getCurrentUser() {
-        CoroutineScope(Dispatchers.IO).launch {
-            signedInUser.postValue(userDao.getCurrentUser())
+    fun getUser() {
+        userRepository.fetchUser { user ->
+            signedInUser.postValue(user)
         }
     }
 

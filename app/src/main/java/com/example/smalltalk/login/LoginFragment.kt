@@ -41,8 +41,6 @@ class LoginFragment : Fragment() {
         signInButton = view.findViewById(R.id.button_sign_in)
         progressBar = view.findViewById(R.id.login_progressbar)
 
-        model.buildDatabase(requireContext())
-
         setListeners()
     }
 
@@ -54,10 +52,10 @@ class LoginFragment : Fragment() {
             val username = usernameInput.text.toString()
             val password = passwordInput.text.toString()
 
-            model.fetchUser(Volley.newRequestQueue(context), username, password)
+            model.signIn(username, password)
         }
 
-        model.activeUser.observe(viewLifecycleOwner) {
+        model.signedIn.observe(viewLifecycleOwner) {
             requireActivity().runOnUiThread {
                 findNavController().navigate(
                     LoginFragmentDirections.actionLoginFragmentToChatFragment()

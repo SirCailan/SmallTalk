@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
-    /*companion object {
+    companion object {
 
         @Volatile
         private var instance: AppDatabase? = null
@@ -23,8 +23,8 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(
                 context,
-                AppDatabase::class.java, "SmallTalk_Database"
+                AppDatabase::class.java, "SmallTalk_DATABASE"
             ).build()
         }
-    } */
+    }
 }
